@@ -42,7 +42,13 @@ let typed='';document.addEventListener('keydown',e=>{if(e.ctrlKey||e.altKey||e.m
 document.querySelector('.brand').addEventListener('dblclick',()=>{const entry=window.prompt(' ');if(entry!==null)tryPrivate(entry)});
 document.getElementById('closePrivate').addEventListener('click',()=>{privateScreen.classList.remove('open');privateScreen.setAttribute('aria-hidden','true')});
 privateScreen.addEventListener('click',e=>{if(e.target===privateScreen){privateScreen.classList.remove('open');privateScreen.setAttribute('aria-hidden','true')}});
-let playing=false;const track=new Audio('./Raat%20Ki%20Shuruat.mp3');track.loop=true;track.preload='none';
-document.getElementById('music').addEventListener('click',async()=>{const btn=document.getElementById('music');if(!playing){try{await track.play();playing=true;btn.style.background='#8d2345'}catch(e){btn.title='Upload Raat Ki Shuruat.mp3 to the repository root first';btn.textContent='♡'}}else{track.pause();playing=false;btn.style.background='#1b0b14';btn.textContent='♫'}});
+let playing=false;const track=new Audio('./Raat%20Ki%20Shuruat.mp3');track.loop=true;track.preload='auto';
+const musicBtn=document.getElementById('music');
+async function startMusic(){try{await track.play();playing=true;musicBtn.style.background='#8d2345';musicBtn.textContent='♫';musicBtn.title='Pause background music';return true}catch(e){musicBtn.title='Tap to start music';return false}}
+/* Try autoplay on page load. Browsers may block audible autoplay until the visitor interacts. */
+window.addEventListener('load',()=>{startMusic()});
+/* If autoplay was blocked, start music on the first natural interaction with the page. */
+document.addEventListener('pointerdown',()=>{if(!playing)startMusic()},{once:true});
+musicBtn.addEventListener('click',async()=>{if(!playing){await startMusic()}else{track.pause();playing=false;musicBtn.style.background='#1b0b14';musicBtn.textContent='♫';musicBtn.title='Play background music'}});
 </script>
 </body></html>

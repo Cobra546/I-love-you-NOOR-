@@ -44,11 +44,12 @@ document.getElementById('closePrivate').addEventListener('click',()=>{privateScr
 privateScreen.addEventListener('click',e=>{if(e.target===privateScreen){privateScreen.classList.remove('open');privateScreen.setAttribute('aria-hidden','true')}});
 let playing=false;const track=new Audio('./Raat%20Ki%20Shuruat.mp3');track.loop=true;track.preload='auto';
 const musicBtn=document.getElementById('music');
-async function startMusic(){try{await track.play();playing=true;musicBtn.style.background='#8d2345';musicBtn.textContent='♫';musicBtn.title='Pause background music';return true}catch(e){musicBtn.title='Tap to start music';return false}}
-/* Try autoplay on page load. Browsers may block audible autoplay until the visitor interacts. */
+function updateMusicButton(){musicBtn.textContent=playing?'❚❚':'♫';musicBtn.style.background=playing?'#8d2345':'#1b0b14';musicBtn.title=playing?'Pause background music':'Play background music'}
+track.addEventListener('play',()=>{playing=true;updateMusicButton()});
+track.addEventListener('pause',()=>{playing=false;updateMusicButton()});
+track.addEventListener('error',()=>{musicBtn.title='Audio file could not load — check MP3 filename and upload';musicBtn.textContent='!';});
+async function startMusic(){try{track.currentTime=0;await track.play();playing=true;updateMusicButton()}catch(e){playing=false;updateMusicButton();musicBtn.title='Music blocked or MP3 file missing — tap again or check file upload';}}
 window.addEventListener('load',()=>{startMusic()});
-/* If autoplay was blocked, start music on the first natural interaction with the page. */
-document.addEventListener('pointerdown',()=>{if(!playing)startMusic()},{once:true});
-musicBtn.addEventListener('click',async()=>{if(!playing){await startMusic()}else{track.pause();playing=false;musicBtn.style.background='#1b0b14';musicBtn.textContent='♫';musicBtn.title='Play background music'}});
+musicBtn.addEventListener('click',async()=>{if(track.paused){await startMusic()}else{track.pause()}});
 </script>
 </body></html>

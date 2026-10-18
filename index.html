@@ -44,7 +44,7 @@ document.getElementById('closePrivate').addEventListener('click',()=>{privateScr
 privateScreen.addEventListener('click',e=>{if(e.target===privateScreen){privateScreen.classList.remove('open');privateScreen.setAttribute('aria-hidden','true')}});
 let playing=false;const track=new Audio('./Raat%20Ki%20Shuruat.mp3');track.loop=true;track.preload='auto';
 const musicBtn=document.getElementById('music');
-function updateMusicButton(){musicBtn.textContent=playing?'❚❚':'♫';musicBtn.style.background=playing?'#8d2345':'#1b0b14';musicBtn.title=playing?'Pause background music':'Play background music'}
+function updateMusicButton(){musicBtn.textContent=playing?'♥':'♫';musicBtn.style.background=playing?'#8d2345':'#1b0b14';musicBtn.title=playing?'Pause background music':'Play background music';musicBtn.setAttribute('aria-label',playing?'Pause background music':'Play background music')}
 track.addEventListener('play',()=>{playing=true;updateMusicButton()});
 track.addEventListener('pause',()=>{playing=false;updateMusicButton()});
 track.addEventListener('error',()=>{musicBtn.title='Audio file could not load — check MP3 filename and upload';musicBtn.textContent='!';});
